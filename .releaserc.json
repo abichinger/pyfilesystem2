@@ -1,0 +1,46 @@
+{
+    "branches": [
+        "master"
+    ],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "semantic-release-pypi",
+            {
+                "pypiPublish": false,
+                "versionCmd": [
+                    "sed",
+                    "-i",
+                    "s/^__version__ = \".*\"/__version__ = \"${version}\"/",
+                    "fs/_version.py"
+                ]
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "path": "dist/fs*.whl",
+                        "label": "wheel"
+                    },
+                    {
+                        "path": "dist/fs*.tar.gz",
+                        "label": "sdist"
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
+                "assets": [
+                    "CHANGELOG.md",
+                    "fs/_version.py"
+                ]
+            }
+        ]
+    ]
+}
